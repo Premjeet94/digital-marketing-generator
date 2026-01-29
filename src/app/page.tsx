@@ -7,10 +7,12 @@ import Header from "@/components/Header";
 export default function Home() {
   const [result, setResult] = React.useState(null);
   const [error, setError] = React.useState<string | null>(null);
+  const [loading, setLoading] = React.useState(false);
 
   async function handleGenerate(data: any) {
     try {
       setError(null);
+      setLoading(true);
 
       const res = await fetch("/api/generate", {
         method: "POST",
@@ -43,7 +45,7 @@ export default function Home() {
         <Header />
       </div>
       <div className="flex gap-10">
-        <Form onSubmit={handleGenerate} />
+        <Form onSubmit={handleGenerate} loading={loading} />
         <div className="bg-white rounded-xl mt-4 shadow-sm border p-6 space-y-4">
           <Output result={result} />
         </div>
