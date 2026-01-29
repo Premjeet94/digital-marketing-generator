@@ -1,8 +1,13 @@
 "use client";
 import { useState } from "react";
-import React from "react";
 
-export default function Form({ onSubmit }: { onSubmit: (data: any) => void }) {
+export default function Form({
+  onSubmit,
+  loading,
+}: {
+  onSubmit: (data: any) => void;
+  loading: boolean;
+}) {
   const [form, setForm] = useState({
     businessType: "",
     platform: "Instagram",
@@ -10,36 +15,41 @@ export default function Form({ onSubmit }: { onSubmit: (data: any) => void }) {
     goal: "",
     productName: "",
   });
-  const [loading, setloading] = React.useState(false)
 
-  function handleChange(e: any) {
+  function handleChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  function handleSubmit(e: any) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     onSubmit(form);
-    console.log(form);
   }
 
   return (
     <div className="bg-white rounded-xl shadow-sm mt-4 border p-6 space-y-4">
-      <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Business Type */}
         <label className="block space-y-1">
           <span className="text-sm font-medium text-gray-700">
             Business Type
           </span>
           <input
             name="businessType"
-            placeholder="Business Type"
+            value={form.businessType}
             onChange={handleChange}
+            placeholder="e.g. Gym, Cafe, SaaS"
             className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-black focus:ring-1 focus:ring-black"
           />
         </label>
+
+        {/* Platform */}
         <label className="block space-y-1">
           <span className="text-sm font-medium text-gray-700">Platform</span>
           <select
             name="platform"
+            value={form.platform}
             onChange={handleChange}
             className="w-full cursor-pointer rounded border p-2"
           >
@@ -48,10 +58,13 @@ export default function Form({ onSubmit }: { onSubmit: (data: any) => void }) {
             <option>Ad Copy</option>
           </select>
         </label>
+
+        {/* Tone */}
         <label className="block space-y-1">
           <span className="text-sm font-medium text-gray-700">Tone</span>
           <select
             name="tone"
+            value={form.tone}
             onChange={handleChange}
             className="w-full cursor-pointer rounded border p-2"
           >
@@ -60,29 +73,41 @@ export default function Form({ onSubmit }: { onSubmit: (data: any) => void }) {
             <option>Friendly</option>
           </select>
         </label>
+
+        {/* Goal */}
         <label className="block space-y-1">
           <span className="text-sm font-medium text-gray-700">Goal</span>
           <input
             name="goal"
-            placeholder="Goal"
+            value={form.goal}
             onChange={handleChange}
+            placeholder="e.g. Promote summer sale"
             className="w-full rounded border p-2"
           />
         </label>
+
+        {/* Product Name */}
         <label className="block space-y-1">
           <span className="text-sm font-medium text-gray-700">
-            Product Name
+            Product Name (optional)
           </span>
           <input
             name="productName"
-            placeholder="Product Name (optional)"
+            value={form.productName}
             onChange={handleChange}
-            className="w-full  rounded border p-2"
+            placeholder="e.g. UrbanFlex"
+            className="w-full rounded border p-2"
           />
         </label>
-        <button disabled={loading} className="w-full bg-black text-white py-2.5 rounded-md font-medium hover:bg-gray-900 disabled:opacity-50"> {loading ? "Generating..." : "Generate Content"}</button>
+
+        {/* Submit */}
+        <button
+          disabled={loading}
+          className="w-full bg-black text-white py-2.5 rounded-md font-medium hover:bg-gray-900 disabled:opacity-50"
+        >
+          {loading ? "Generating..." : "Generate Content"}
+        </button>
       </form>
-      
     </div>
   );
 }

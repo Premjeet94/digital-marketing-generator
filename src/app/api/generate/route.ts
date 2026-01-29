@@ -14,17 +14,18 @@ export async function POST(req: Request) {
     const prompt = `
 You are a professional marketing copywriter.
 
-Respond with ONLY raw JSON.
-Do not include explanations, markdown, or extra text.
+You MUST return ONLY valid JSON.
+Do NOT include explanations, text, markdown, or comments.
+Do NOT wrap the JSON in backticks.
 
-Example response:
+Return exactly this structure:
 {
-  "headline": "Example headline",
-  "caption": "Example caption",
-  "cta": "Example call to action"
+  "headline": "string",
+  "caption": "string",
+  "cta": "string"
 }
 
-Details:
+Now generate content using:
 Business Type: ${body.businessType}
 Platform: ${body.platform}
 Tone: ${body.tone}
@@ -32,13 +33,16 @@ Goal: ${body.goal}
 Product Name: ${body.productName || "N/A"}
 `;
 
+
     const completion = await openrouter.chat.completions.create({
       model: "meta-llama/llama-3.1-70b-instruct",
       messages: [{ role: "user", content: prompt }],
-      temperature: 0.7,
+      temperature: 0.6,
+      max_tokens: 300
     });
 
     const text = completion.choices[0].message.content!;
+    console.log("RAW AI OUTPUT:", text);
     const parsed = JSON.parse(text);
 
     return Response.json(parsed);
