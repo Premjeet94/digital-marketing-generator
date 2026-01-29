@@ -117,7 +117,7 @@ OPENROUTER_API_KEY=your_openrouter_api_key_here
 npm run dev
 
 
-Open http://localhost:3000
+Open https://digital-marketing-generator.vercel.app/
  in your browser.
 
 ⚠️ Limitations
